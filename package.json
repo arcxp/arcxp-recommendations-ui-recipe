@@ -1,0 +1,26 @@
+{
+  "name": "arc-fy-recommendations-ui-recipe",
+  "version": "0.1.0",
+  "description": "Example PageBuilder bundle (recipe) for the FY Recommendations feature block and its content source.",
+  "private": true,
+  "license": "CC-BY-NC-ND-4.0",
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
+    "@babel/preset-react": "^7.23.3",
+    "@testing-library/jest-dom": "^6.4.0",
+    "@testing-library/react": "^16.0.0",
+    "axios": "^1.6.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-mock-console": "^2.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}
