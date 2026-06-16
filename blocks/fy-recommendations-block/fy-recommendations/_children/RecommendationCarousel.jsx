@@ -26,7 +26,7 @@ const RecommendationCarousel = ({ items = [], openInNewTab = false }) => {
 
 	if (!items.length) return null;
 
-	return (
+	return (		
 		<Carousel
 			id={id}
 			label={phrases.t("fy-recommendations.aria-label")}

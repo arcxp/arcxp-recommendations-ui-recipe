@@ -23,7 +23,7 @@ const getDeviceType = () => {
 	return "desktop";
 };
 
-function FYRecommendations({ customFields = {} }) {
+function FYRecommendations({ customFields = {} }) {	
 	const {
 		displayAmount = 5,
 		lazyLoad = true,
