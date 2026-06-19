@@ -20,6 +20,7 @@ module.exports = {
     '^fusion:context$': path.join(mocks, 'fusion-context.js'),
     '^fusion:environment$': path.join(mocks, 'fusion-environment.js'),
     '^fusion:content$': path.join(mocks, 'fusion-content.js'),
+    '^fusion:properties$': path.join(mocks, 'fusion-properties.js'),
     '^@arc-fusion/prop-types$': path.join(mocks, 'arc-fusion-prop-types.js'),
     '^@wpmedia/arc-themes-components$': path.join(mocks, 'arc-themes-components.js'),
   },

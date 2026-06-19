@@ -15,10 +15,10 @@ import { useFusionContext, useComponentContext } from "fusion:context";
 
 const BLOCK_CLASS_NAME = "b-fy-recommendations";
 
-// Forked from the Story Carousel block. Renders the ANS subset produced by the
-// fy-recommendations content source as a compact horizontal carousel, at parity
-// with the fy-ui-poc reference card (image, category, headline, author, premium
-// ribbon). Missing fields degrade gracefully.
+// Forked from the Story Carousel block. Renders the ANS subset produced by
+// scoredItemToAns from the recommender ASI response, as a compact horizontal
+// carousel, at parity with the fy-ui-poc reference card (image, category,
+// headline, author, premium ribbon). Missing fields degrade gracefully.
 const RecommendationCarousel = ({ items = [], openInNewTab = false }) => {
 	const { id } = useComponentContext();
 	const { arcSite } = useFusionContext();

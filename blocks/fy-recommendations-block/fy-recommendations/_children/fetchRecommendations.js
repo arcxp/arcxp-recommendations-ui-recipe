@@ -1,39 +1,55 @@
 /* global globalThis */
 // Client-side data fetch for the FY Recommendations block.
 //
-// Instead of calling the recommender directly from the browser (blocked by
-// CORS and by the gateway's forbidden identity headers), we invoke the
-// `fy-recommendations` content source through Fusion's content-fetch endpoint.
-// That request is same-origin as the rendered page, and the source resolves
-// server-side where it injects `arc-organization` / `arc-service`.
+// Browser-direct against the recommender ASI (Arc Service Integration). The
+// `recommend` ASI is CORS-enabled and browser-facing, authenticated with an
+// `X-Api-Key` header (see fy/docs/ASI.md and ClientOnboarding.md). This replaces
+// the previous content-source proxy — no server-side hop is needed.
 //
-// ⚠️ The content-fetch path is Fusion-engine/deploy dependent. The default
-// targets the common `/<contextPath>/api/v3/content/fetch/<source>` shape; pass
-// `contextPath` (or a full `endpoint`) to override if your engine differs.
+// ⚠️ Host convention (the gotcha): `<org>-config-prod.api.arc-cdn.net`. The middle
+// segment `config` is the ASI's literal siteId, NOT the content `site_id` query
+// param — that one is the Arc website id (e.g. arcSite). `prod` is fixed (FY only
+// provisions prod) and the edge host carries no region segment (platform-global).
 
-export const SOURCE_NAME = "fy-recommendations";
+import scoredItemToAns from "./scoredItemToAns";
 
-export const buildContentFetchUrl = ({ contextPath = "pf", site, query, endpoint }) => {
-	const base = endpoint || `/${contextPath}/api/v3/content/fetch/${SOURCE_NAME}`;
-	const params = new URLSearchParams({ query: JSON.stringify(query) });
-	if (site) params.set("_website", site);
-	return `${base}?${params.toString()}`;
+export const buildAsiBase = (org) => `https://${org}-config-prod.api.arc-cdn.net`;
+
+export const buildRecommendationsUrl = ({ asiBase, siteId, query = {} }) => {
+	const params = new URLSearchParams({
+		site_id: siteId,
+		num_results: String(query.num_results ?? 5),
+	});
+	if (query.user_id) params.set("user_id", query.user_id);
+	if (query.item_id) params.set("item_id", query.item_id);
+	if (query.device_type) params.set("device_type", query.device_type);
+	return `${asiBase}/recommend/v1/recommendations?${params.toString()}`;
 };
 
 const EMPTY = { content_elements: [], attribution: null };
 
-const fetchRecommendations = async ({ site, query, contextPath, endpoint, signal } = {}) => {
-	const url = buildContentFetchUrl({ contextPath, site, query, endpoint });
+const fetchRecommendations = async ({ asiBase, apiKey, site, query = {}, signal } = {}) => {
+	// Missing config (no host/key/site) → render nothing rather than throw.
+	if (!asiBase || !apiKey || !site) return EMPTY;
+
+	const url = buildRecommendationsUrl({ asiBase, siteId: site, query });
 
 	try {
-		const res = await globalThis.fetch(url, { signal });
+		const res = await globalThis.fetch(url, {
+			method: "GET",
+			headers: { "X-Api-Key": apiKey },
+			signal,
+		});
 		if (!res.ok) return EMPTY;
+
 		const data = await res.json();
+		const recs = Array.isArray(data?.recommendations) ? data.recommendations : [];
 		return {
-			content_elements: Array.isArray(data?.content_elements) ? data.content_elements : [],
+			content_elements: recs.map((s) => scoredItemToAns(s, site)),
 			attribution: data?.attribution ?? null,
 		};
 	} catch {
+		// Network/HTTP/parse/CORS error: degrade to empty.
 		return EMPTY;
 	}
 };

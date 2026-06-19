@@ -6,9 +6,15 @@ jest.mock("fusion:context", () => ({
 	useFusionContext: () => ({ globalContent: null, arcSite: "the-site" }),
 }));
 
+jest.mock("fusion:properties", () => ({
+	__esModule: true,
+	default: () => ({ fyRecommenderOrg: "the-org", fyRecommenderApiKey: "test-key" }),
+}));
+
 jest.mock("./_children/fetchRecommendations", () => ({
 	__esModule: true,
 	default: jest.fn(() => Promise.resolve({ content_elements: [], attribution: null })),
+	buildAsiBase: (org) => `https://${org}-config-prod.api.arc-cdn.net`,
 }));
 
 jest.mock("./_children/RecommendationCarousel", () => ({

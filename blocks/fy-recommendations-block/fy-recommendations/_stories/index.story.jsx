@@ -3,7 +3,7 @@ import RecommendationCarousel from "../_children/RecommendationCarousel";
 
 // The full feature (features/fy-recommendations/default.jsx) fetches client-side,
 // so stories drive the presentational carousel directly with ANS-shaped sample
-// data — the same shape the fy-recommendations content source returns.
+// data — the same shape scoredItemToAns produces from the recommender ASI response.
 export default {
 	title: "Blocks/FY Recommendations",
 	parameters: {

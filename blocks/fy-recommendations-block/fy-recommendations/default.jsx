@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import PropTypes from "@arc-fusion/prop-types";
 import { useFusionContext } from "fusion:context";
+import getProperties from "fusion:properties";
 import RecommendationCarousel from "./_children/RecommendationCarousel";
-import fetchRecommendations from "./_children/fetchRecommendations";
+import fetchRecommendations, { buildAsiBase } from "./_children/fetchRecommendations";
 
 const BLOCK_CLASS_NAME = "b-fy-recommendations";
 
@@ -23,14 +24,22 @@ const getDeviceType = () => {
 	return "desktop";
 };
 
-function FYRecommendations({ customFields = {} }) {	
+function FYRecommendations({ customFields = {} }) {
 	const {
 		displayAmount = 5,
 		lazyLoad = true,
-		subscriptionTier,
 		openInNewTab = false,
 	} = customFields;
 	const { globalContent, arcSite } = useFusionContext();
+	// ASI host + key come from site properties (set per-deployment, e.g. in
+	// PageBuilder admin), not customFields — they are deployment-wide, not
+	// per-placement. `fyRecommenderAsiBase` is the explicit base; if only
+	// `fyRecommenderOrg` is set we derive the host from the ASI convention.
+	const siteProps = getProperties(arcSite) || {};
+	const asiBase =
+		siteProps.fyRecommenderAsiBase ||
+		(siteProps.fyRecommenderOrg ? buildAsiBase(siteProps.fyRecommenderOrg) : undefined);
+	const apiKey = siteProps.fyRecommenderApiKey;
 	const [items, setItems] = useState(null);
 	const [fetched, setFetched] = useState(false);
 	const sentinelRef = useRef(null);
@@ -46,9 +55,8 @@ function FYRecommendations({ customFields = {} }) {
 		};
 		if (userId) query.user_id = userId;
 		if (globalContent?._id) query.item_id = globalContent._id;
-		if (subscriptionTier) query.subscription_tier = subscriptionTier;
 
-		fetchRecommendations({ site: arcSite, query })
+		fetchRecommendations({ asiBase, apiKey, site: arcSite, query })
 			.then(({ content_elements: elements, attribution }) => {
 				attributionRef.current = attribution;
 				if (Array.isArray(elements) && elements.length > 0) {
@@ -56,7 +64,7 @@ function FYRecommendations({ customFields = {} }) {
 				}
 			})
 			.finally(() => setFetched(true));
-	}, [arcSite, displayAmount, globalContent, subscriptionTier]);
+	}, [arcSite, asiBase, apiKey, displayAmount, globalContent]);
 
 	useEffect(() => {
 		// Never fetch on the server; only after mount in the browser.
@@ -116,11 +124,6 @@ FYRecommendations.propTypes = {
 			label: "Lazy load",
 			description: "Fetch recommendations when the block scrolls into view",
 			defaultValue: true,
-			group: "Configure Content",
-		}),
-		subscriptionTier: PropTypes.oneOf(["free", "premium"]).tag({
-			label: "Subscription tier",
-			description: "Filter recommendations by subscription tier",
 			group: "Configure Content",
 		}),
 		openInNewTab: PropTypes.bool.tag({

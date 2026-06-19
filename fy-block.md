@@ -1,3 +1,23 @@
+> **Implementation update (current state).** The original ticket below assumed a
+> **server-side content source** (proxying the recommender, injecting gateway identity
+> headers, configured via `FY_RECOMMENDER_BASE` / `ORGANIZATION`). The implementation has
+> since moved to **browser-direct calls to the recommender ASI** (Arc Service Integration),
+> authenticated with an `X-Api-Key` header. As a result:
+>
+> - The content-source block was **removed**; the feature block fetches the ASI directly.
+> - Config comes from **site properties** (`fyRecommenderApiKey`, `fyRecommenderAsiBase` /
+>   `fyRecommenderOrg`), not the `FY_RECOMMENDER_BASE` / `ORGANIZATION` env vars in the
+>   verification section below.
+> - `subscription_tier` was **dropped** as a custom field — editor-set/static contradicts
+>   per-user personalization; it must be derived from the user at runtime if ever needed.
+> - Browser-direct means CORS applies: the deployed origin must be in the ASI's
+>   `cors_allowed_origins`. See [`fy/docs/ASI.md`](https://github.com/WPMedia/foryou-fy/blob/main/docs/ASI.md)
+>   and the recipe [`README.md`](README.md) / block [`README.md`](blocks/fy-recommendations-block/README.md).
+>
+> The user story and acceptance criteria below are kept as the original ticket of record.
+
+---
+
 User story
 
 As an editor, when I want to enhance a page, I want to drop a fy-recommendations custom feature block onto a layout so that I can display personalized recommendations to users.
