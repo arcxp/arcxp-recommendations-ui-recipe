@@ -52,8 +52,6 @@ const RecommendationCarousel = ({ items = [], openInNewTab = false }) => {
 				const url =
 					websites[arcSite]?.website_url ?? Object.values(websites)[0]?.website_url ?? null;
 
-				if (!url) return null;
-
 				return (
 					<Carousel.Item
 						key={item._id || index}
@@ -62,38 +60,57 @@ const RecommendationCarousel = ({ items = [], openInNewTab = false }) => {
 							maximum: items.length,
 						})}
 					>
-						{({ viewable }) => (
-							<Link
-								className={`${BLOCK_CLASS_NAME}__card`}
-								href={url}
-								openInNewTab={openInNewTab}
-								assistiveHidden={viewable ? null : true}
-							>
-								<Image alt={headlineText || ""} src={imageURL} />
-								{isPremium ? (
-									<Paragraph className={`${BLOCK_CLASS_NAME}__card-premium`}>
-										{phrases.t("fy-recommendations.premium-label")}
-									</Paragraph>
-								) : null}
-								<Stack className={`${BLOCK_CLASS_NAME}__card-body`}>
-									{category ? (
-										<Paragraph className={`${BLOCK_CLASS_NAME}__card-category`}>
-											{category}
+						{({ viewable }) => {
+							const cardBody = (
+								<>
+									{imageURL ? (
+										<Image alt={headlineText || ""} src={imageURL} />
+									) : (
+										<div
+											className={`${BLOCK_CLASS_NAME}__card-image-placeholder`}
+											aria-hidden="true"
+										/>
+									)}
+									{isPremium ? (
+										<Paragraph className={`${BLOCK_CLASS_NAME}__card-premium`}>
+											{phrases.t("fy-recommendations.premium-label")}
 										</Paragraph>
 									) : null}
-									{headlineText ? (
-										<HeadingSection>
-											<Heading className={`${BLOCK_CLASS_NAME}__card-title`}>
-												{headlineText}
-											</Heading>
-										</HeadingSection>
-									) : null}
-									{author ? (
-										<Paragraph className={`${BLOCK_CLASS_NAME}__card-author`}>{author}</Paragraph>
-									) : null}
-								</Stack>
-							</Link>
-						)}
+									<Stack className={`${BLOCK_CLASS_NAME}__card-body`}>
+										{category ? (
+											<Paragraph className={`${BLOCK_CLASS_NAME}__card-category`}>
+												{category}
+											</Paragraph>
+										) : null}
+										{headlineText ? (
+											<HeadingSection>
+												<Heading className={`${BLOCK_CLASS_NAME}__card-title`}>
+													{headlineText}
+												</Heading>
+											</HeadingSection>
+										) : null}
+										{author ? (
+											<Paragraph className={`${BLOCK_CLASS_NAME}__card-author`}>{author}</Paragraph>
+										) : null}
+									</Stack>
+								</>
+							);
+							// Render as a link when the item has a URL; otherwise render a
+							// non-linked card so URL-less items (e.g. bootstrap/synthetic
+							// content with url:null) still display instead of being dropped.
+							return url ? (
+								<Link
+									className={`${BLOCK_CLASS_NAME}__card`}
+									href={url}
+									openInNewTab={openInNewTab}
+									assistiveHidden={viewable ? null : true}
+								>
+									{cardBody}
+								</Link>
+							) : (
+								<Stack className={`${BLOCK_CLASS_NAME}__card`}>{cardBody}</Stack>
+							);
+						}}
 					</Carousel.Item>
 				);
 			})}

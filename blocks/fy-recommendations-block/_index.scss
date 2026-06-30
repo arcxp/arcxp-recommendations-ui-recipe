@@ -15,6 +15,14 @@
 		@include scss.block-components("fy-recommendations-card");
 	}
 
+	// Shown when an item has no thumbnail_url. Keeps the card's image footprint
+	// with a neutral gradient instead of collapsing or rendering a broken image.
+	&__card-image-placeholder {
+		inline-size: 100%;
+		aspect-ratio: 16 / 9;
+		background: linear-gradient(135deg, #3f3f46, #18181b);
+	}
+
 	&__card-category {
 		@include scss.block-properties("fy-recommendations-card-category");
 		@include scss.block-components("fy-recommendations-card-category");
