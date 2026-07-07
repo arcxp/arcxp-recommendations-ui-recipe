@@ -1,7 +1,7 @@
 {
-  "name": "arc-fy-recommendations-ui-recipe",
+  "name": "arc-recommendations-ui-recipe",
   "version": "0.1.0",
-  "description": "Example PageBuilder bundle (recipe) for the FY Recommendations feature block and its content source.",
+  "description": "Example PageBuilder bundle (recipe) for the Recommendations feature block.",
   "private": true,
   "license": "CC-BY-NC-ND-4.0",
   "scripts": {

@@ -6,14 +6,13 @@ structure conventions.
 
 | Block | Type | Role |
 | ----- | ---- | ---- |
-| [`blocks/fy-recommendations-block`](blocks/fy-recommendations-block) | Feature | Renders the ranked recommendations as a horizontal carousel (forked from the Story Carousel block). Fetches client-side after mount, browser-direct against the recommender ASI. |
+| [`blocks/recommendations-block`](blocks/recommendations-block) | Feature | Renders the ranked recommendations as a horizontal carousel (forked from the Story Carousel block). Fetches client-side after mount, browser-direct against the recommender ASI. |
 
 The feature block fetches **client-side after mount** (never during SSR —
 recommendations are per-user and must not be baked into shared, edge-cached HTML)
 by calling the recommender **ASI** (Arc Service Integration) directly from the
 browser. The `recommend` ASI is CORS-enabled and authenticated with an `X-Api-Key`
-header, so no server-side content source is needed. See
-[`fy/docs/ASI.md`](https://github.com/WPMedia/foryou-fy/blob/main/docs/ASI.md).
+header, so no server-side content source is needed.
 
 ## Quickstart
 

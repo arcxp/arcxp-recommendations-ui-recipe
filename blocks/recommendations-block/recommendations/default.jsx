@@ -6,7 +6,7 @@ import RecommendationCarousel from "./_children/RecommendationCarousel";
 import fetchRecommendations, { buildAsiBase } from "./_children/fetchRecommendations";
 import previewItems from "./_children/previewData";
 
-const BLOCK_CLASS_NAME = "b-fy-recommendations";
+const BLOCK_CLASS_NAME = "b-recommendations";
 
 const getUserId = () => {
 	try {
@@ -25,7 +25,7 @@ const getDeviceType = () => {
 	return "desktop";
 };
 
-function FYRecommendations({ customFields = {} }) {
+function Recommendations({ customFields = {} }) {
 	const {
 		displayAmount = 5,
 		lazyLoad = true,
@@ -135,12 +135,12 @@ function FYRecommendations({ customFields = {} }) {
 	);
 }
 
-FYRecommendations.label = "Recommendations – Arc Block";
+Recommendations.label = "Recommendations – Arc Block";
 
 // find matching icon in https://redirector.arcpublishing.com/pagebuilder/block-icon-library
-FYRecommendations.icon = "ui-browser-slider";
+Recommendations.icon = "ui-browser-slider";
 
-FYRecommendations.propTypes = {
+Recommendations.propTypes = {
 	customFields: PropTypes.shape({
 		displayAmount: PropTypes.number.tag({
 			label: "Number of recommendations",
@@ -176,4 +176,4 @@ FYRecommendations.propTypes = {
 	}),
 };
 
-export default FYRecommendations;
+export default Recommendations;

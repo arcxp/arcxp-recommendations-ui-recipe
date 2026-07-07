@@ -1,5 +1,5 @@
 {
-	"fy-recommendations": {
+	"recommendations": {
 		"styles": {
 			"default": {
 				"components": {
@@ -22,7 +22,7 @@
 			}
 		}
 	},
-	"fy-recommendations-card": {
+	"recommendations-card": {
 		"styles": {
 			"default": {
 				"components": {

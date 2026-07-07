@@ -13,7 +13,7 @@ import {
 } from "@wpmedia/arc-themes-components";
 import { useFusionContext, useComponentContext } from "fusion:context";
 
-const BLOCK_CLASS_NAME = "b-fy-recommendations";
+const BLOCK_CLASS_NAME = "b-recommendations";
 
 // Forked from the Story Carousel block. Renders the ANS subset produced by
 // scoredItemToAns from the recommender ASI response, as a compact horizontal
@@ -29,14 +29,14 @@ const RecommendationCarousel = ({ items = [], openInNewTab = false }) => {
 	return (		
 		<Carousel
 			id={id}
-			label={phrases.t("fy-recommendations.aria-label")}
+			label={phrases.t("recommendations.aria-label")}
 			nextButton={
-				<Carousel.Button id={id} label={phrases.t("fy-recommendations.right-arrow-label")}>
+				<Carousel.Button id={id} label={phrases.t("recommendations.right-arrow-label")}>
 					<Icon name="ChevronRight" />
 				</Carousel.Button>
 			}
 			previousButton={
-				<Carousel.Button id={id} label={phrases.t("fy-recommendations.left-arrow-label")}>
+				<Carousel.Button id={id} label={phrases.t("recommendations.left-arrow-label")}>
 					<Icon name="ChevronLeft" />
 				</Carousel.Button>
 			}
@@ -55,7 +55,7 @@ const RecommendationCarousel = ({ items = [], openInNewTab = false }) => {
 				return (
 					<Carousel.Item
 						key={item._id || index}
-						label={phrases.t("fy-recommendations.slide-indicator", {
+						label={phrases.t("recommendations.slide-indicator", {
 							current: index + 1,
 							maximum: items.length,
 						})}
@@ -73,7 +73,7 @@ const RecommendationCarousel = ({ items = [], openInNewTab = false }) => {
 									)}
 									{isPremium ? (
 										<Paragraph className={`${BLOCK_CLASS_NAME}__card-premium`}>
-											{phrases.t("fy-recommendations.premium-label")}
+											{phrases.t("recommendations.premium-label")}
 										</Paragraph>
 									) : null}
 									<Stack className={`${BLOCK_CLASS_NAME}__card-body`}>

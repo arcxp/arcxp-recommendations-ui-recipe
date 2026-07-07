@@ -1,5 +1,5 @@
 {
-	"fy-recommendations.aria-label": {
+	"recommendations.aria-label": {
 		"ar": "موصى به لك",
 		"de": "Für dich empfohlen",
 		"en": "Recommended for you",
@@ -14,7 +14,7 @@
 		"zh-CN": "为你推荐",
 		"zh-TW": "為你推薦"
 	},
-	"fy-recommendations.premium-label": {
+	"recommendations.premium-label": {
 		"ar": "بريميوم",
 		"de": "Premium",
 		"en": "Premium",
@@ -29,7 +29,7 @@
 		"zh-CN": "高级",
 		"zh-TW": "進階"
 	},
-	"fy-recommendations.left-arrow-label": {
+	"recommendations.left-arrow-label": {
 		"ar": "السابق",
 		"de": "Vorheriges",
 		"en": "Previous",
@@ -44,7 +44,7 @@
 		"zh-CN": "上一张",
 		"zh-TW": "上一則"
 	},
-	"fy-recommendations.right-arrow-label": {
+	"recommendations.right-arrow-label": {
 		"ar": "التالي",
 		"de": "Nächstes",
 		"en": "Next",
@@ -59,7 +59,7 @@
 		"zh-CN": "下一张",
 		"zh-TW": "下一則"
 	},
-	"fy-recommendations.slide-indicator": {
+	"recommendations.slide-indicator": {
 		"ar": "الشريحة %{current} من %{maximum}",
 		"de": "Bild %{current} von %{maximum}",
 		"en": "Slide %{current} of %{maximum}",
