@@ -1,4 +1,4 @@
-# @wpmedia/fy-recommendations-block
+# @arcxp/recommendations-block
 
 A personalized recommendations carousel, forked from the Story Carousel block. It
 renders the ranked items returned by the Recommender as a compact horizontal
@@ -8,8 +8,7 @@ The block fetches **client-side after mount** (nothing is fetched during SSR —
 recommendations are per-user and must not be baked into shared, edge-cached HTML)
 by calling the recommender **ASI** (Arc Service Integration) directly from the
 browser. The `recommend` ASI is CORS-enabled and authenticated with an `X-Api-Key`
-header, so no content-source proxy is needed. See
-[`fy/docs/ASI.md`](https://github.com/WPMedia/foryou-fy/blob/main/docs/ASI.md).
+header, so no content-source proxy is needed.
 
 Host + key come from **site properties** (set per-deployment, e.g. in PageBuilder
 admin), not custom fields:
@@ -85,11 +84,11 @@ Consumed from each `content_elements[x]` (missing fields degrade gracefully):
 
 | Phrase key                             | Default (English)                |
 | -------------------------------------- | -------------------------------- |
-| `fy-recommendations.aria-label`        | `Recommended for you`            |
-| `fy-recommendations.right-arrow-label` | `Next`                           |
-| `fy-recommendations.left-arrow-label`  | `Previous`                       |
-| `fy-recommendations.slide-indicator`   | `Slide %{current} of %{maximum}` |
-| `fy-recommendations.premium-label`     | `Premium`                        |
+| `recommendations.aria-label`        | `Recommended for you`            |
+| `recommendations.right-arrow-label` | `Next`                           |
+| `recommendations.left-arrow-label`  | `Previous`                       |
+| `recommendations.slide-indicator`   | `Slide %{current} of %{maximum}` |
+| `recommendations.premium-label`     | `Premium`                        |
 
 ## Events
 

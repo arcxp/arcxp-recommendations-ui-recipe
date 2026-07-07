@@ -1,5 +1,5 @@
 {
-	"name": "@wpmedia/fy-recommendations-block",
+	"name": "@arcxp/recommendations-block",
 	"version": "0.1.0",
 	"description": "Recommendations Block",
 	"author": "Arc XP - Themes",
@@ -18,8 +18,8 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "ssh://git@github.com/WPMedia/arc-themes-blocks.git",
-		"directory": "blocks/fy-recommendations-block"
+		"url": "ssh://git@github.com/arcxp/recommendations-ui-recipe.git",
+		"directory": "blocks/recommendations-block"
 	},
 	"peerDependencies": {
 		"@arc-fusion/prop-types": "^0.1.5",

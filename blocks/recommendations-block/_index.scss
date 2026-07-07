@@ -1,0 +1,48 @@
+@use "@wpmedia/arc-themes-components/scss";
+
+.b-recommendations {
+	&__card {
+		display: flex;
+		flex-direction: column;
+		text-decoration: none;
+		padding: 0;
+
+		img {
+			inline-size: 100%;
+		}
+
+		@include scss.block-properties("recommendations-card");
+		@include scss.block-components("recommendations-card");
+	}
+
+	// Shown when an item has no thumbnail_url. Keeps the card's image footprint
+	// with a neutral gradient instead of collapsing or rendering a broken image.
+	&__card-image-placeholder {
+		inline-size: 100%;
+		aspect-ratio: 16 / 9;
+		background: linear-gradient(135deg, #3f3f46, #18181b);
+	}
+
+	&__card-category {
+		@include scss.block-properties("recommendations-card-category");
+		@include scss.block-components("recommendations-card-category");
+	}
+
+	&__card-title {
+		@include scss.block-properties("recommendations-card-title");
+		@include scss.block-components("recommendations-card-title");
+	}
+
+	&__card-author {
+		@include scss.block-properties("recommendations-card-author");
+		@include scss.block-components("recommendations-card-author");
+	}
+
+	&__card-premium {
+		@include scss.block-properties("recommendations-card-premium");
+		@include scss.block-components("recommendations-card-premium");
+	}
+
+	@include scss.block-properties("recommendations");
+	@include scss.block-components("recommendations");
+}
