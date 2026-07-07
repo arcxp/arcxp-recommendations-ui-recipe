@@ -4,6 +4,7 @@ import { useFusionContext } from "fusion:context";
 import getProperties from "fusion:properties";
 import RecommendationCarousel from "./_children/RecommendationCarousel";
 import fetchRecommendations, { buildAsiBase } from "./_children/fetchRecommendations";
+import previewItems from "./_children/previewData";
 
 const BLOCK_CLASS_NAME = "b-fy-recommendations";
 
@@ -29,8 +30,21 @@ function FYRecommendations({ customFields = {} }) {
 		displayAmount = 5,
 		lazyLoad = true,
 		openInNewTab = false,
+		previewMode = false,
+		previewUserId = "",
 	} = customFields;
-	const { globalContent, arcSite } = useFusionContext();
+	const { globalContent, arcSite, isAdmin } = useFusionContext();
+	const trimmedPreviewUserId = typeof previewUserId === "string" ? previewUserId.trim() : "";
+	// Preview Mode only takes effect in a preview context: the PageBuilder Admin
+	// Preview (`isAdmin`, true only inside the editor) OR local development on
+	// localhost (so `fusion start` can exercise the mock data). On a published
+	// page neither is true, so previewMode is inert regardless of the saved value.
+	// Evaluated inside effects/callbacks (client-side) where `window` exists.
+	const isPreviewContext = useCallback(() => {
+		if (isAdmin) return true;
+		if (typeof window === "undefined") return false;
+		return /^(localhost|127\.0\.0\.1|\[::1\])$/i.test(window.location.hostname);
+	}, [isAdmin]);
 	// ASI host + key come from site properties (set per-deployment, e.g. in
 	// PageBuilder admin), not customFields — they are deployment-wide, not
 	// per-placement. `fyRecommenderAsiBase` is the explicit base; if only
@@ -48,7 +62,19 @@ function FYRecommendations({ customFields = {} }) {
 	const attributionRef = useRef(null);
 
 	const loadRecommendations = useCallback(() => {
-		const userId = getUserId();
+		const previewActive = previewMode && isPreviewContext();
+
+		// Preview Mode with no user id: render mock data and skip the network call
+		// entirely (this is why no ASI request is made in preview).
+		if (previewActive && !trimmedPreviewUserId) {
+			attributionRef.current = null;
+			setItems(previewItems);
+			setFetched(true);
+			return;
+		}
+
+		// Preview + a user id → recommend for that user; otherwise the visitor's own id.
+		const userId = previewActive && trimmedPreviewUserId ? trimmedPreviewUserId : getUserId();
 		const query = {
 			num_results: displayAmount,
 			device_type: getDeviceType(),
@@ -64,11 +90,13 @@ function FYRecommendations({ customFields = {} }) {
 				}
 			})
 			.finally(() => setFetched(true));
-	}, [arcSite, asiBase, apiKey, displayAmount, globalContent]);
+	}, [arcSite, asiBase, apiKey, displayAmount, globalContent, previewMode, isPreviewContext, trimmedPreviewUserId]);
 
 	useEffect(() => {
-		// Never fetch on the server; only after mount in the browser.
-		if (!lazyLoad) {
+		// In a preview context (or when lazy-load is off) load immediately so the
+		// mock/preview renders without scrolling; otherwise wait for the block to
+		// scroll into view. Never fetches on the server.
+		if (!lazyLoad || (previewMode && isPreviewContext())) {
 			loadRecommendations();
 			return undefined;
 		}
@@ -87,7 +115,7 @@ function FYRecommendations({ customFields = {} }) {
 		});
 		observer.observe(el);
 		return () => observer.disconnect();
-	}, [lazyLoad, loadRecommendations]);
+	}, [lazyLoad, previewMode, isPreviewContext, loadRecommendations]);
 
 	if (items) {
 		return (
@@ -107,7 +135,7 @@ function FYRecommendations({ customFields = {} }) {
 	);
 }
 
-FYRecommendations.label = "FY Recommendations – Arc Block";
+FYRecommendations.label = "Recommendations – Arc Block";
 
 // find matching icon in https://redirector.arcpublishing.com/pagebuilder/block-icon-library
 FYRecommendations.icon = "ui-browser-slider";
@@ -131,6 +159,19 @@ FYRecommendations.propTypes = {
 			description: "When enabled, recommendation links open in a new browser tab",
 			defaultValue: false,
 			group: "Configure Content",
+		}),
+		previewMode: PropTypes.bool.tag({
+			label: "Preview Mode",
+			description:
+				"Editor-only. When on, the carousel shows dummy data (or recommendations for the Preview User ID below). Never affects the published page.",
+			defaultValue: false,
+			group: "Preview",
+		}),
+		previewUserId: PropTypes.string.tag({
+			label: "Preview User ID",
+			description:
+				"Editor-only. With Preview Mode on, show recommendations for this user id. Leave empty to preview dummy data. Only used when Preview Mode is on.",
+			group: "Preview",
 		}),
 	}),
 };

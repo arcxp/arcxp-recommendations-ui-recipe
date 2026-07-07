@@ -1,5 +1,5 @@
 /* global globalThis */
-// Client-side data fetch for the FY Recommendations block.
+// Client-side data fetch for the Recommendations block.
 //
 // Browser-direct against the recommender ASI (Arc Service Integration). The
 // `recommend` ASI is CORS-enabled and browser-facing, authenticated with an
@@ -8,8 +8,8 @@
 //
 // ⚠️ Host convention (the gotcha): `<org>-config-prod.api.arc-cdn.net`. The middle
 // segment `config` is the ASI's literal siteId, NOT the content `site_id` query
-// param — that one is the Arc website id (e.g. arcSite). `prod` is fixed (FY only
-// provisions prod) and the edge host carries no region segment (platform-global).
+// param — that one is the Arc website id (e.g. arcSite). `prod` is fixed (the
+// recommender only provisions prod) and the edge host carries no region segment (platform-global).
 
 import scoredItemToAns from "./scoredItemToAns";
 

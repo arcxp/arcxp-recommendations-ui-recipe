@@ -1,6 +1,6 @@
-# ARC FY Recommendations UI Recipe
+# ARC Recommendations UI Recipe
 
-Example PageBuilder bundle (recipe) showing how to add **personalized FY
+Example PageBuilder bundle (recipe) showing how to add **personalized
 recommendations** to Arc XP pages, following the arc-themes-blocks naming and
 structure conventions.
 

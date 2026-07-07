@@ -1,7 +1,7 @@
 # @wpmedia/fy-recommendations-block
 
 A personalized recommendations carousel, forked from the Story Carousel block. It
-renders the ranked items returned by the FY Recommender as a compact horizontal
+renders the ranked items returned by the Recommender as a compact horizontal
 carousel.
 
 The block fetches **client-side after mount** (nothing is fetched during SSR —
@@ -94,5 +94,5 @@ Consumed from each `content_elements[x]` (missing fields degrade gracefully):
 ## Events
 
 N/A today. The block captures the response `attribution` (`exposure_id`) and per-item
-`fy_attribution_id` so exposure/click events can be round-tripped to the FY collector
+`fy_attribution_id` so exposure/click events can be round-tripped to the collector
 in a follow-up.

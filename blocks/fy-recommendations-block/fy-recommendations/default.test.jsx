@@ -1,9 +1,10 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, waitFor } from "@testing-library/react";
 import FYRecommendations from "./default";
+import fetchRecommendations from "./_children/fetchRecommendations";
 
 jest.mock("fusion:context", () => ({
-	useFusionContext: () => ({ globalContent: null, arcSite: "the-site" }),
+	useFusionContext: () => ({ globalContent: null, arcSite: "the-site", isAdmin: true }),
 }));
 
 jest.mock("fusion:properties", () => ({
@@ -23,10 +24,38 @@ jest.mock("./_children/RecommendationCarousel", () => ({
 }));
 
 describe("FYRecommendations", () => {
+	beforeEach(() => {
+		jest.clearAllMocks();
+	});
+
 	it("renders a placeholder sentinel before fetch completes", () => {
 		const { container } = render(<FYRecommendations />);
 		const placeholder = container.querySelector(".b-fy-recommendations__placeholder");
 		expect(placeholder).toBeTruthy();
 		expect(placeholder.getAttribute("aria-hidden")).toBe("true");
+	});
+
+	it("fetches real recommendations when preview mode is off", async () => {
+		render(<FYRecommendations customFields={{ previewMode: false }} />);
+		await waitFor(() => expect(fetchRecommendations).toHaveBeenCalled());
+	});
+
+	it("renders mock data in preview mode without calling the API", async () => {
+		const { findByTestId } = render(<FYRecommendations customFields={{ previewMode: true }} />);
+		const carousel = await findByTestId("carousel");
+		expect(carousel).toHaveTextContent("6 items");
+		expect(fetchRecommendations).not.toHaveBeenCalled();
+	});
+
+	it("requests recommendations for the preview user id when one is provided", async () => {
+		render(
+			<FYRecommendations customFields={{ previewMode: true, previewUserId: "preview-user-9" }} />,
+		);
+		await waitFor(() => expect(fetchRecommendations).toHaveBeenCalled());
+		expect(fetchRecommendations).toHaveBeenCalledWith(
+			expect.objectContaining({
+				query: expect.objectContaining({ user_id: "preview-user-9" }),
+			}),
+		);
 	});
 });

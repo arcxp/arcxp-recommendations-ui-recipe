@@ -1,5 +1,5 @@
-// Maps the FY Recommender's flat ScoredItem shape (single-call enrichment,
-// ADR-004) onto the ANS subset that the FY Recommendations carousel consumes.
+// Maps the Recommender's flat ScoredItem shape (single-call enrichment,
+// ADR-004) onto the ANS subset that the Recommendations carousel consumes.
 // Kept aligned with fy-ui-poc/src/lib/recommendations.ts so both reference UIs
 // render the same backend contract.
 //
@@ -10,7 +10,9 @@ const scoredItemToAns = (s, siteId) => ({
 	_id: s.item_id,
 	headlines: s.title ? { basic: s.title } : undefined,
 	display_date: s.timestamp,
-	promo_items: s.thumbnail_url ? { basic: { url: s.thumbnail_url } } : undefined,
+	// `type: "image"` is REQUIRED — getImageFromANS ignores promo items whose
+	// basic.type !== "image" (returns null → no image rendered).
+	promo_items: s.thumbnail_url ? { basic: { type: "image", url: s.thumbnail_url } } : undefined,
 	websites: s.url ? { [siteId]: { website_url: s.url } } : undefined,
 	credits: s.author ? { by: [{ name: s.author }] } : undefined,
 	taxonomy:
