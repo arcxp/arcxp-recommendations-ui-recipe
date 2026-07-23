@@ -1,5 +1,7 @@
 # ARC Recommendations UI Recipe
 
+![Recommendations Carousel](/recommendations-carousel.png)
+
 Example PageBuilder bundle (recipe) showing how to add **personalized
 recommendations** to Arc XP pages, following the arc-themes-blocks naming and
 structure conventions.
